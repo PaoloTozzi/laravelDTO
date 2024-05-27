@@ -7,6 +7,7 @@ use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Services\ArticleService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ArticleController extends Controller
 {
@@ -36,7 +37,7 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request) :RedirectResponse
     {
         $articleDTO = new ArticleDTO(
             $request->title,
@@ -45,7 +46,7 @@ class ArticleController extends Controller
             $request->text,
         );
 
-        $article = $this->articleService->createArticle($articleDTO);
+        $this->articleService->createArticle($articleDTO);
 
         return to_route('home')->with('message', 'Articolo inserito con successo');
     }
@@ -53,9 +54,9 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Article $article)
+    public function show(Article $article) :View
     {
-        //
+        return view('article.show', ['article' => $this->articleService->showArticle($article)]);
     }
 
     /**
@@ -77,8 +78,10 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Article $article)
+    public function destroy(Article $article) :RedirectResponse
     {
-        //
+        $this->articleService->deleteArticle($article);
+
+        return to_route('home')->with('message', 'Articolo eliminato con successo');
     }
 }

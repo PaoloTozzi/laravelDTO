@@ -4,6 +4,6 @@
         <h5 class="card-title">{{$title}}</h5>
         <p class="card-text">{{$subtitle}}</p>
         <p class="card-text">{{$text}}</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <a href="{{$url}}" class="btn btn-primary">Go somewhere</a>
     </div>
 </div>
