@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('subtitle');
-            $table->string('img');
+            $table->string('img')->default('/public/image/no.webp');
             $table->longText('text');
             $table->timestamps();
         });

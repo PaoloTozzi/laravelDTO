@@ -26,6 +26,20 @@ class ArticleService
         return $article;
     }
 
+    
+    public function editArticle(Article $article){
+        return $article;
+    }
+    
+    public function updateArticle(ArticleDTO $articleDTO, Article $article){
+        return $article->update([
+            'title' => $articleDTO->title,
+            'subtitle' => $articleDTO->subtitle,
+            'img' => $articleDTO->img,
+            'text' => $articleDTO->text,
+        ]);
+    }
+
     public function deleteArticle(Article $article){
 
         if($article->img){
@@ -34,4 +48,5 @@ class ArticleService
 
         return $article->delete();
     }
+
 }

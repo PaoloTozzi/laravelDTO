@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Services\ArticleService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\ArticleStoreRequest;
+use App\Http\Requests\ArticleUpdateRequest;
 
 class ArticleController extends Controller
 {
@@ -37,12 +39,12 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) :RedirectResponse
+    public function store(ArticleStoreRequest $request) :RedirectResponse
     {
         $articleDTO = new ArticleDTO(
             $request->title,
             $request->subtitle,
-            $request->file('img')->store('public/image'),
+            $request->file('img')->store('public/images'),
             $request->text,
         );
 
@@ -56,23 +58,32 @@ class ArticleController extends Controller
      */
     public function show(Article $article) :View
     {
-        return view('article.show', ['article' => $this->articleService->showArticle($article)]);
+        return view('article.show', compact('article'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Article $article)
+    public function edit(Article $article) :View
     {
-        //
+        return view('article.edit',compact('article'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Article $article)
+    public function update(ArticleUpdateRequest $request, Article $article) :RedirectResponse
     {
-        //
+        $articleDTO = new ArticleDTO(
+            $request->title,
+            $request->subtitle,
+            $request->file('img') ? $request->file('img')->store('public/images') : $article->img,
+            $request->text
+        );
+
+        $this->articleService->updateArticle($articleDTO, $article);
+
+        return to_route('home')->with('message', 'Articolo aggiornato con successo');
     }
 
     /**
